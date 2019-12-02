@@ -10,10 +10,27 @@ import (
 )
 
 func main() {
+
+}
+
+// FuelCounterUpper calulates fuel needed based on mass
+func FuelCounterUpper(mass float64) float64 {
+	// Divide mass by 3
+	result := mass / 3.0
+	// Round down
+	result = math.Floor(result)
+	// Subtract 2
+	result -= 2
+
+	return result
+}
+
+// PartOne code
+func PartOne() (float64, error) {
 	// Open file, and check for any errors
 	file, err := os.Open("input.txt")
 	if err != nil {
-		log.Fatal(err)
+		return 0.0, err
 	}
 
 	// Close the file after we use it :)
@@ -32,7 +49,7 @@ func main() {
 		// Convert string to float64, and check for error
 		value, err := strconv.ParseFloat(text, 64)
 		if err != nil {
-			log.Fatal(err)
+			return 0.0, err
 		}
 
 		// Calculate fuel, and add it to the sum
@@ -41,21 +58,11 @@ func main() {
 
 	// Print fuel requirements
 	fmt.Printf("Fuel requirements: %.0f", sum)
-
+	
 	// Check for any scanning errors, and handle them
 	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+		return 0.0, err
 	}
-}
 
-// FuelCounterUpper calulates fuel needed based on mass
-func FuelCounterUpper(mass float64) float64 {
-	// Divide mass by 3
-	result := mass / 3.0
-	// Round down
-	result = math.Floor(result)
-	// Subtract 2
-	result -= 2
-
-	return result
+	return sum, nil
 }
