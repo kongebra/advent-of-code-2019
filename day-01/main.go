@@ -1,9 +1,8 @@
 package main
 
 import (
-bufio"
+	"bufio"
 	"fmt"
-
 	"log"
 	"math"
 	"os"
