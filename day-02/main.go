@@ -2,7 +2,9 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
+	"log"
 	"strconv"
 	"strings"
 )
@@ -19,8 +21,19 @@ const (
 	Halt Opcode = 99
 )
 
-func main() {
+var (
+	maxLength = 0
+)
 
+func main() {
+	goal := 19690720
+
+	verb, noun, err := PartTwo(goal)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(verb, noun, 100*verb+noun)
 }
 
 func getValuesFromFile(filename string) ([]int, error) {
@@ -51,14 +64,16 @@ func convertStringToIntSlice(input []string) ([]int, error) {
 }
 
 // PartOne code
-func PartOne() (int, error) {
+func PartOne(noun, verb int) (int, error) {
 	values, err := getValuesFromFile("input.txt")
 	if err != nil {
 		return 0, err
 	}
 
-	values[1] = 12
-	values[2] = 2
+	maxLength = len(values)
+
+	values[1] = noun // 12
+	values[2] = verb // 2
 
 	var current Opcode
 	var index = 0
@@ -84,4 +99,24 @@ func PartOne() (int, error) {
 	}
 
 	return values[0], nil
+}
+
+// PartTwo code
+func PartTwo(goal int) (int, int, error) {
+	_, _ = PartOne(0, 0)
+
+	for i := 0; i < maxLength; i++ {
+		for j := 0; j < maxLength; j++ {
+			try, err := PartOne(i, j)
+			if err != nil {
+				return i, j, err
+			}
+
+			if try == goal {
+				return i, j, nil
+			}
+		}
+	}
+
+	return 0, 0, errors.New("could not find goal")
 }
